@@ -3,47 +3,70 @@ window.addEventListener('load', (event) => {
 
   // Use configuration or fallback to defaults
   const config = typeof TIMER_CONFIG !== 'undefined' ? TIMER_CONFIG : {
+    eventDate: "2025-09-04 23:19", // Tomorrow at 23:19
+    timezone: "Asia/Colombo",
     clockFace: "HourlyCounter",
     playSound: false,
     showNotification: false,
     debug: false
   };
 
-  // Set countdown to 24 hours (24 * 60 * 60 = 86400 seconds)
-  const countdownSeconds = 24 * 60 * 60;
+  let currentDate = new Date();
+  let targetDate = moment.tz(config.eventDate, config.timezone);
 
   // Debug logging
   if (config.debug) {
-    console.log("Starting a 24-hour countdown.", countdownSeconds, "seconds");
+    console.log("Current date:", currentDate);
+    console.log("Target date:", targetDate.format());
+    console.log("Time difference (seconds):", (targetDate / 1000 - currentDate.getTime() / 1000));
   }
 
-  // Initialize the countdown timer
-  clock = $(".clock").FlipClock(countdownSeconds, {
-    clockFace: config.clockFace,
-    countdown: true,
-    callbacks: {
-      stop: function() {
-        console.log("Timer has ended!");
-        
-        // Play sound if enabled
-        if (config.playSound) {
-          playNotificationSound(config.soundFile);
-        }
-        
-        // Show notification if enabled
-        if (config.showNotification) {
-          showCompletionNotification(config);
-        }
-        
-        // Redirect if URL is provided
-        if (config.redirectUrl) {
-          setTimeout(() => {
-            window.location.href = config.redirectUrl;
-          }, 3000); // Wait 3 seconds before redirect
+  // Calculate the difference in seconds between the future and current date
+  let diff = targetDate / 1000 - currentDate.getTime() / 1000;
+
+  if (diff <= 0) {
+    // If remaining countdown is 0, initialize the clock at 0
+    clock = $(".clock").FlipClock(0, {
+      clockFace: config.clockFace,
+      countdown: true,
+      autostart: false
+    });
+    console.log("Event time has already passed!");
+    
+    // Show notification if enabled
+    if (config.showNotification) {
+      showCompletionNotification(config);
+    }
+
+  } else {
+    // Run countdown timer to the target date
+    clock = $(".clock").FlipClock(diff, {
+      clockFace: config.clockFace,
+      countdown: true,
+      callbacks: {
+        stop: function() {
+          console.log("Timer has ended!");
+          
+          // Play sound if enabled
+          if (config.playSound) {
+            playNotificationSound(config.soundFile);
+          }
+          
+          // Show notification if enabled
+          if (config.showNotification) {
+            showCompletionNotification(config);
+          }
+          
+          // Redirect if URL is provided
+          if (config.redirectUrl) {
+            setTimeout(() => {
+              window.location.href = config.redirectUrl;
+            }, 3000); // Wait 3 seconds before redirect
+          }
         }
       }
-    }
-  });
+    });
+  }
 });
 
 // Function to play notification sound

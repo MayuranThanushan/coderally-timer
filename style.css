@@ -29,7 +29,7 @@ html, body {
   padding: 20px;
   box-sizing: border-box;
   position: relative;
-  z-index: 1;
+  z-index: 10; /* Ensure content is above animations */
 }
 
 /* Logo Styling */
@@ -99,51 +99,211 @@ html, body {
   text-shadow: 0 0 10px #FFF;
 }
 
-/* Waves Styling */
-.waves-container {
+/* Ninja Animation Container */
+.ninja-animation-container {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 15vh;
-  opacity: 0.8;
-  z-index: 0;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1; /* Bring effects to front but behind text */
+  overflow: hidden;
 }
 
-.waves {
+/* Floating Ninja Stars */
+.ninja-stars {
   position: absolute;
-  bottom: 0;
   width: 100%;
   height: 100%;
 }
 
-.parallax > use {
-  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+.ninja-star {
+  position: absolute;
+  color: #03FF8C;
+  font-size: 20px; /* Made larger */
+  opacity: 0.8; /* Made more visible */
+  animation: ninjaStarFloat linear infinite;
+  text-shadow: 0 0 15px #03FF8C, 0 0 30px #03FF8C50;
+  font-weight: bold;
 }
 
-.parallax > use:nth-child(1) {
-  animation-delay: -2s;
-  animation-duration: 7s;
+.ninja-star:nth-child(1) {
+  left: 10%;
+  animation-duration: 8s; /* Faster */
+  animation-delay: 0s;
 }
 
-.parallax > use:nth-child(2) {
-  animation-delay: -3s;
+.ninja-star:nth-child(2) {
+  left: 30%;
   animation-duration: 10s;
+  animation-delay: 2s;
 }
 
-.parallax > use:nth-child(3) {
-  animation-delay: -4s;
-  animation-duration: 13s;
+.ninja-star:nth-child(3) {
+  left: 50%;
+  animation-duration: 9s;
+  animation-delay: 4s;
 }
 
-.parallax > use:nth-child(4) {
-  animation-delay: -5s;
-  animation-duration: 20s;
+.ninja-star:nth-child(4) {
+  left: 70%;
+  animation-duration: 11s;
+  animation-delay: 1s;
 }
 
-@keyframes move-forever {
-  0% { transform: translate3d(-90px,0,0); }
-  100% { transform: translate3d(85px,0,0); }
+.ninja-star:nth-child(5) {
+  left: 90%;
+  animation-duration: 7s;
+  animation-delay: 3s;
+}
+
+@keyframes ninjaStarFloat {
+  0% {
+    transform: translateY(110vh) rotate(0deg) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+    transform: translateY(100vh) rotate(36deg) scale(1);
+  }
+  90% {
+    opacity: 0.8;
+    transform: translateY(10vh) rotate(324deg) scale(1);
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Ninja Smoke Effects */
+.ninja-smoke {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50%; /* Increased height */
+}
+
+.smoke-particle {
+  position: absolute;
+  bottom: 0;
+  width: 8px; /* Made larger */
+  height: 8px;
+  background: radial-gradient(circle, #03FF8C60 0%, #03FF8C30 50%, transparent 80%);
+  border-radius: 50%;
+  animation: smokeRise linear infinite;
+  box-shadow: 0 0 10px #03FF8C40;
+}
+
+.smoke-particle:nth-child(1) {
+  left: 20%;
+  animation-duration: 6s;
+  animation-delay: 0s;
+}
+
+.smoke-particle:nth-child(2) {
+  left: 40%;
+  animation-duration: 7s;
+  animation-delay: 2s;
+}
+
+.smoke-particle:nth-child(3) {
+  left: 60%;
+  animation-duration: 5s;
+  animation-delay: 1s;
+}
+
+.smoke-particle:nth-child(4) {
+  left: 80%;
+  animation-duration: 8s;
+  animation-delay: 3s;
+}
+
+@keyframes smokeRise {
+  0% {
+    transform: translateY(0) scale(0.3);
+    opacity: 0.9;
+  }
+  30% {
+    transform: translateY(-15vh) scale(0.8);
+    opacity: 0.7;
+  }
+  70% {
+    transform: translateY(-35vh) scale(1.2);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-60vh) scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Matrix Rain Effect with Ninja Characters */
+.matrix-rain {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.matrix-char {
+  position: absolute;
+  color: #03FF8C;
+  font-size: 24px; /* Made larger */
+  font-family: 'Courier New', monospace;
+  opacity: 0.9; /* Made more visible */
+  animation: matrixFall linear infinite;
+  text-shadow: 0 0 20px #03FF8C, 0 0 40px #03FF8C50;
+  font-weight: bold;
+}
+
+.matrix-char:nth-child(1) {
+  left: 5%;
+  animation-duration: 6s;
+  animation-delay: 0s;
+}
+
+.matrix-char:nth-child(2) {
+  left: 25%;
+  animation-duration: 8s;
+  animation-delay: 3s;
+}
+
+.matrix-char:nth-child(3) {
+  left: 45%;
+  animation-duration: 7s;
+  animation-delay: 1s;
+}
+
+.matrix-char:nth-child(4) {
+  left: 65%;
+  animation-duration: 9s;
+  animation-delay: 4s;
+}
+
+.matrix-char:nth-child(5) {
+  left: 85%;
+  animation-duration: 5s;
+  animation-delay: 2s;
+}
+
+@keyframes matrixFall {
+  0% {
+    transform: translateY(-10vh) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+    transform: translateY(0vh) scale(1);
+  }
+  90% {
+    opacity: 0.9;
+    transform: translateY(90vh) scale(1);
+  }
+  100% {
+    transform: translateY(110vh) scale(0.8);
+    opacity: 0;
+  }
 }
 
 /* Ninja Effects Container */
