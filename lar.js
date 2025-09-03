@@ -1,11 +1,15 @@
+// BACKUP SCRIPT - Original Laravel/Australia configuration
+// This file contains the original countdown configuration for reference
+// Use script.js for the active countdown timer
+
 window.addEventListener('load', (event) => {
     let clock;
 
     // Grab the current date
     let currentDate = new Date();
 
-    // Set the target date for the hackathon (adjust as needed)
-    let targetDate = moment.tz("2024-10-30 23:59", "Australia/Sydney"); // Adjust date/time and timezone
+    // Set the target date for the hackathon (ORIGINAL CONFIGURATION)
+    let targetDate = moment.tz("2024-10-30 23:59", "Australia/Sydney"); // Original date/time and timezone
 
     // Calculate the difference in seconds between the future and current date
     let diff = targetDate / 1000 - currentDate.getTime() / 1000;
@@ -13,7 +17,7 @@ window.addEventListener('load', (event) => {
     if (diff <= 0) {
         // If remaining countdown is 0
         clock = $(".clock").FlipClock(0, {
-            clockFace: "DailyCounter",
+            clockFace: "DailyCounter", // Original clock face
             countdown: true,
             autostart: false
         });
@@ -21,7 +25,7 @@ window.addEventListener('load', (event) => {
     } else {
         // Run countdown timer
         clock = $(".clock").FlipClock(diff, {
-            clockFace: "DailyCounter",
+            clockFace: "DailyCounter", // Original clock face
             countdown: true,
             callbacks: {
                 stop: function() {

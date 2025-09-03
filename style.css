@@ -1,93 +1,121 @@
-body {
-  /*background-image: url('./backgorun.jpg'); !* Replace with the actual path to your image *!*/
-  background-size: auto;
-  background-position: center; /* Center the background image */
-  /*color: white; !* Adjust text color for contrast *!*/
-  background-color: black; /* Set the background to black */
-  color: white; /* Set the default text color to white */
+/* Matrix Theme - Clean Layout */
+html, body {
+  background: linear-gradient(135deg, #000 0%, #001a0f 50%, #000 100%);
+  background-size: 400% 400%;
+  animation: matrixBackground 20s ease infinite;
+  color: #03FF8C;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents scrolling */
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+  text-shadow: 0 0 10px #03FF8C;
+  min-height: 100vh;
+  height: 100vh;
 }
 
-.logo {
+@keyframes matrixBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Main container for centering content */
+.main-container {
   display: flex;
-  justify-content: center; /* Center the logo horizontally */
-  margin-bottom: 20px; /* Space between logo and countdown timer */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo Styling */
+.logo {
+  padding-bottom: 5vh;
+  filter: drop-shadow(0 0 20px #03FF8C);
+  animation: logoGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+  from { filter: drop-shadow(0 0 20px #03FF8C); }
+  to { filter: drop-shadow(0 0 30px #03FF8C); }
 }
 
 .logo img {
-  max-width: 200px; /* Adjust the size of the logo */
-  height: auto; /* Maintain aspect ratio */
+  max-width: 200px;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Clock Styling */
+.clock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Flip Clock Customization */
 .flip-clock-label {
   font-weight: bold;
   font-size: 1.2em;
-  /*color: white !important; */
+  color: #FFF !important;
+  text-shadow: 0 0 10px #FFF;
+  font-family: 'Courier New', monospace;
 }
+
 .flip-clock-wrapper ul {
-  background: #ffffff; /* Set the background of the flip clock to black */
-  color: white; /* Set the text color to white */
-  border-radius: 6px;
+  background: linear-gradient(145deg, #111, #000);
+  color: #03FF8C;
+  border-radius: 8px;
+  box-shadow: 0 0 20px #03FF8C40;
+  border: 1px solid #03FF8C20;
 }
 
 .flip-clock-wrapper ul li a div div.inn {
-  color: #000000; /* Set the digits to white */
-  background-color: #ffffff; /* Set the background behind the digits to black */
-  text-shadow: none; /* Remove text shadow for clearer look */
+  color: #03FF8C !important;
+  background: linear-gradient(145deg, #111, #000);
+  text-shadow: 0 0 15px #03FF8C;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  border-radius: 4px;
 }
 
 .flip-clock-dot {
-  background: white; /* Set dots between numbers to white */
+  background: #FFF !important;
+  box-shadow: 0 0 10px #FFF;
 }
 
 .flip-clock-divider .flip-clock-label {
-  color: white !important; /* Ensure that labels like Days, Hours, Minutes, Seconds are white */
+  color: #FFF !important;
+  text-shadow: 0 0 10px #FFF;
 }
 
-
-
-/*.clock {*/
-/*  width: 650px;*/
-/*  position: absolute;*/
-/*  top: 50%;*/
-/*  left: 50%;*/
-/*  transform: translateX(-50%) translateY(-50%);*/
-/*}*/
-
-
-.clock {
-  width: auto; /* Allow the clock width to adjust based on content */
-  display: flex; /* Use flexbox to center */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
+/* Waves Styling */
 .waves-container {
-  position: absolute;
-  bottom: 0;  /* Anchors the waves to the bottom of the page */
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 15vh;  /* You can adjust the height as needed */
+  height: 15vh;
+  opacity: 0.8;
+  z-index: 0;
 }
 
 .waves {
   position: absolute;
-  bottom: 0;  /* Anchors the SVG waves at the bottom of the container */
+  bottom: 0;
   width: 100%;
   height: 100%;
 }
-
-#tsparticles {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 0;  /* Ensure it stays above all content */
-}
-
 
 .parallax > use {
   animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
@@ -114,10 +142,81 @@ body {
 }
 
 @keyframes move-forever {
+  0% { transform: translate3d(-90px,0,0); }
+  100% { transform: translate3d(85px,0,0); }
+}
+
+/* Ninja Effects Container */
+#tsparticles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Simple ninja star effects */
+.simple-ninja-star {
+  position: absolute;
+  color: #03FF8C;
+  font-size: 8px;
+  animation: simpleFloat linear infinite;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+@keyframes simpleFloat {
   0% {
-    transform: translate3d(-90px, 0, 0);
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
   }
   100% {
-    transform: translate3d(85px, 0, 0);
+    transform: translateY(-10vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .logo img {
+    max-width: 150px;
+  }
+  
+  .flip-clock-wrapper {
+    transform: scale(0.8);
+  }
+  
+  .flip-clock-label {
+    font-size: 0.9em !important;
+  }
+  
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo img {
+    max-width: 120px;
+  }
+  
+  .flip-clock-wrapper {
+    transform: scale(0.5);
+  }
+  
+  .flip-clock-label {
+    font-size: 0.8em !important;
+  }
+  
+  body {
+    font-size: 12px;
   }
 }

@@ -1,99 +1,98 @@
-// window.addEventListener('load', (event) => {
-//   let clock;
-//
-//   // Grab the current date
-//   let currentDate = new Date();
-//
-//   // Target future date/24 hour time/Timezone
-//   let targetDate = moment.tz("2024-10-30 23:59", "Australia/Sydney");
-//
-//   // Calculate the difference in seconds between the future and current date
-//   let diff = targetDate / 1000 - currentDate.getTime() / 1000;
-//
-//   if (diff <= 0) {
-//     // If remaining countdown is 0
-//     clock = (".clock").FlipClock(0, {
-//       clockFace: "DailyCounter",
-//       countdown: true,
-//       autostart: false
-//     });
-//     console.log("Date has already passed!")
-//
-//   } else {
-//     // Run countdown timer
-//     clock = $(".clock").FlipClock(diff, {
-//       clockFace: "DailyCounter",
-//       countdown: true,
-//       callbacks: {
-//         stop: function() {
-//           console.log("Timer has ended!")
-//         }
-//       }
-//     });
-//
-//     // Check when timer reaches 0, then stop at 0
-//     setTimeout(function() {
-//       checktime();
-//     }, 1000);
-//
-//     function checktime() {
-//       t = clock.getTime();
-//       if (t <= 0) {
-//         clock.setTime(0);
-//       }
-//       setTimeout(function() {
-//         checktime();
-//       }, 1000);
-//     }
-//   }
-// });
-//
 window.addEventListener('load', (event) => {
   let clock;
 
+  // Use configuration or fallback to defaults
+  const config = typeof TIMER_CONFIG !== 'undefined' ? TIMER_CONFIG : {
+    clockFace: "HourlyCounter",
+    playSound: false,
+    showNotification: false,
+    debug: false
+  };
 
-  let currentDate = new Date();
+  // Set countdown to 24 hours (24 * 60 * 60 = 86400 seconds)
+  const countdownSeconds = 24 * 60 * 60;
 
-  let targetDate = moment.tz("2024-09-15 10:00", "Asia/Colombo");
+  // Debug logging
+  if (config.debug) {
+    console.log("Starting a 24-hour countdown.", countdownSeconds, "seconds");
+  }
 
-  // Calculate the difference in seconds between the future and current date
-  let diff = targetDate / 1000 - currentDate.getTime() / 1000;
-
-  if (diff <= 0) {
-    // If remaining countdown is 0, initialize the clock at 0
-    clock = $(".clock").FlipClock(0, {
-      clockFace: "HourlyCounter", // Changed from DailyCounter to HourlyCounter
-      countdown: true,
-      autostart: false
-    });
-    console.log("Date has already passed!");
-
-  } else {
-    // Run countdown timer
-    clock = $(".clock").FlipClock(diff, {
-      clockFace: "HourlyCounter", // Changed from DailyCounter to HourlyCounter
-      countdown: true,
-      callbacks: {
-        stop: function() {
-          console.log("Timer has ended!");
+  // Initialize the countdown timer
+  clock = $(".clock").FlipClock(countdownSeconds, {
+    clockFace: config.clockFace,
+    countdown: true,
+    callbacks: {
+      stop: function() {
+        console.log("Timer has ended!");
+        
+        // Play sound if enabled
+        if (config.playSound) {
+          playNotificationSound(config.soundFile);
+        }
+        
+        // Show notification if enabled
+        if (config.showNotification) {
+          showCompletionNotification(config);
+        }
+        
+        // Redirect if URL is provided
+        if (config.redirectUrl) {
+          setTimeout(() => {
+            window.location.href = config.redirectUrl;
+          }, 3000); // Wait 3 seconds before redirect
         }
       }
+    }
+  });
+});
+
+// Function to play notification sound
+function playNotificationSound(soundFile) {
+  try {
+    const audio = new Audio(soundFile);
+    audio.play().catch(error => {
+      console.log("Could not play notification sound:", error);
     });
+  } catch (error) {
+    console.log("Audio not supported or file not found:", error);
+  }
+}
 
-    // Check when timer reaches 0, then stop at 0
-    setTimeout(function() {
-      checktime();
-    }, 1000);
-
-    function checktime() {
-      let t = clock.getTime();
-      if (t <= 0) {
-        clock.setTime(0);
-      }
-      setTimeout(function() {
-        checktime();
-      }, 1000);
+// Function to show completion notification
+function showCompletionNotification(config) {
+  if (!config.showNotification) return;
+  
+  // Check if browser supports notifications
+  if ("Notification" in window) {
+    // Request permission if not already granted
+    if (Notification.permission === "granted") {
+      showNotification(config);
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(function (permission) {
+        if (permission === "granted") {
+          showNotification(config);
+        }
+      });
     }
   }
-});
+  
+  // Also show an alert as fallback
+  setTimeout(() => {
+    alert(config.notificationTitle + "\n" + config.notificationMessage);
+  }, 500);
+}
+
+// Function to create and show the notification
+function showNotification(config) {
+  const notification = new Notification(config.notificationTitle, {
+    body: config.notificationMessage,
+    icon: "./favicon.png",
+    badge: "./favicon.png"
+  });
+  
+  // Auto-close notification after 10 seconds
+  setTimeout(() => {
+    notification.close();
+  }, 10000);
+}
 
